@@ -63,37 +63,55 @@ void init_radio() {
   }
 }
 
-// Add checksum to message
-char* add_cs(const char* msg) {
-  static char t0[128]; //t0 is variable to store msg with checksum
-  unsigned char cs = 0;
-  int pl_len = strlen(msg);
-  for (int i = 0; i < pl_len; i++) cs += msg[i]; 
-  sprintf(t0, "%s%02X", msg, cs);
-  return t0;
+static inline uint8_t compute_checksum_sum(const char* s) {
+  uint8_t cs = 0;
+  for (const char* p = s; *p; ++p) cs += (uint8_t)(*p);
+  return cs;
 }
 
-void send(char* msg) {
-  uint8_t buf[64];
-  uint8_t pl_len = strlen(msg);
-  uint8_t total = 3 + pl_len; // start_bit + tx_id + msg + stop_bit
+static inline char hex_digit(uint8_t v) {
+  v &= 0x0F;
+  return (v < 10) ? ('0' + v) : ('A' + (v - 10));
+}
 
-  buf[0] = 0x66; // WRITE_TX_FIFO
-  buf[1] = START;
-  buf[2] = ID;
-  memcpy(&buf[3], msg, pl_len);
-  buf[3 + pl_len] = STOP;
+void send_payload_with_checksum(const char* payload, bool corrupt) {
+  uint8_t pl_len = (uint8_t)strlen(payload);
+  uint8_t cs = compute_checksum_sum(payload);
+  char cs_hi = hex_digit(cs >> 4);
+  char cs_lo = hex_digit(cs);
 
-  send_cmd(buf, total + 1);
+  // Buffer: [0]=0x66 cmd, [1]=START, [2]=ID, [3..]=payload, [3+pl_len]=STOP, [3+pl_len+1]=cs_hi, [3+pl_len+2]=cs_lo
+  uint8_t buf[96];
+  uint8_t idx = 0;
+  buf[idx++] = 0x66; // WRITE_TX_FIFO
+  buf[idx++] = START;
+  buf[idx++] = ID;
+
+  // Copy payload
+  for (uint8_t i = 0; i < pl_len; i++) buf[idx + i] = (uint8_t)payload[i];
+
+  // Optionally corrupt one character in the payload AFTER checksum computed
+  if (corrupt && pl_len > 5) {
+    // Flip one mid payload character to a different ASCII symbol
+    uint8_t flip_pos = 1 + (pl_len / 2);
+    if (buf[idx + flip_pos] != (uint8_t)'*') buf[idx + flip_pos] = (uint8_t)'*';
+    else buf[idx + flip_pos] = (uint8_t)'-';
+  }
+
+  idx += pl_len;
+  buf[idx++] = STOP;
+  buf[idx++] = (uint8_t)cs_hi;
+  buf[idx++] = (uint8_t)cs_lo;
+
+  // Send to FIFO
+  send_cmd(buf, idx);
   cts();
 
+  // Start TX
+  uint8_t total = (uint8_t)(idx - 1); // exclude the 0x66 command byte
   uint8_t tx[] = { 0x31, 0x00, 0x00, 0x00, total, 0x00, 0x00 };
   send_cmd(tx, sizeof(tx));
   cts();
-
-  Serial.println(msg);
-  Serial.println(" ");
-
 }
 
 void setup() {
@@ -110,17 +128,13 @@ void setup() {
 uint8_t cnt = 0;
 
 void loop() {
-  char msg_no_cs[64] = "12.345,77.654 13/08/2025 17:30:15 "; //predefined payload
-  char* msg_with_cs = add_cs(msg_no_cs);
+  // Payload format: YYYY-MM-DD,HH:MM:SS,latitude,longitude
+  // Dummy but realistic values
+  char payload[64];
+  snprintf(payload, sizeof(payload), "2025-08-13,17:30:15,12.345678,77.654321");
 
   cnt++;
-  if (cnt % 2 == 0)/*send correct and corrupt data alternatively*/{
-    // corrupt AFTER checksum added
-    msg_with_cs[strlen(msg_with_cs) - 7] = '&'; // Deliberately corrupt the msg
-    Serial.print("SENDING CORRUPTED - ");
-  } else {
-    Serial.print("SENDING CORRECT - ");
-  }
-  send(msg_with_cs);
+  bool corrupt = (cnt % 3 == 0); // 2 valid, then 1 corrupt
+  send_payload_with_checksum(payload, corrupt);
   delay(2000);
 }
