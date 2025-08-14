@@ -8,9 +8,32 @@ PORT=/dev/ttyUSB0
 BAUD=115200
 FILTER_ID=""
 max_rows=20
+SHOW_HELP=0
+
+usage() {
+    cat <<EOF
+Beacon Monitor - Minimal Viewer
+
+Usage:
+  $0 [PORT [BAUD]] [--port /dev/ttyUSB0] [--baud 115200] [--id A1] [--rows N] [--help]
+
+Examples:
+  $0
+  $0 --port /dev/ttyUSB0 --baud 115200
+  $0 --id A1 --rows 50
+  $0 /dev/ttyACM0 115200 --id A1
+
+Columns:
+  ID  DATE       TIME      LATITUDE    LONGITUDE    RCS  CCS  STATUS
+
+Notes:
+  - Input lines must start with: RESULT,ID,DATE,TIME,LAT,LON,RECV_CS,CALC_CS,STATUS
+  - Use Ctrl+C to exit
+EOF
+}
 
 # Backward-compatible positional args: PORT BAUD
-# New flags: --port/-p, --baud/-b, --id, --rows
+# New flags: --port/-p, --baud/-b, --id, --rows, --help
 parse_args() {
     local positional=()
     while [ $# -gt 0 ]; do
@@ -24,7 +47,7 @@ parse_args() {
             --rows)
                 max_rows="$2"; shift 2;;
             -h|--help)
-                echo "Usage: $0 [PORT [BAUD]] [--port /dev/ttyUSB0] [--baud 115200] [--id A1] [--rows N]"; exit 0;;
+                SHOW_HELP=1; shift;;
             *)
                 positional+=("$1"); shift;;
         esac
@@ -80,4 +103,8 @@ monitor() {
 }
 
 parse_args "$@"
+if [ "$SHOW_HELP" -eq 1 ]; then
+    usage
+    exit 0
+fi
 monitor
