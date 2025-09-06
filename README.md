@@ -1,4 +1,4 @@
-# SI4463-Radio-Beacon
+# GPS-Enabled RF Beacon
 
 A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coordinates (date, time, latitude, longitude) over customizable frequency bands in addition to replicating traditionaly RF beacon functionality of sending continous bursts of Continous Waves (tones). Designed using ESP32 microcontrollers, GNSS modules, and the Si4463 RF transceiver, the system supports multiple transmitters with unique IDs, checksum validation, and real-time monitoring via a C-based command-line interface.
 
