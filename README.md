@@ -25,9 +25,9 @@ A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coor
 
 ## *SYSTEM DESIGN*
 ### 1) Transmitter:
-- Acquires GPS data and sends this NMEA strings to the microcontoller
-- TinyGPS++ library then parses these NMEA strings and extracts the date, time, lat and long values
-- A string containing this GPS data, start/stop bit and transmitter ID is then constructed 
+- Acquires GPS data in the form of NMEA strings and sends it to the microcontoller.
+- The TinyGPS++ library (in MCU firmware) then parses these NMEA strings and extracts the date, time, lat and long values.
+- A string containing this GPS data, start/stop bit and the transmitter ID is then constructed.
 - Final string that is to be transmitted looks like:
 ```
 $TX_A1,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
