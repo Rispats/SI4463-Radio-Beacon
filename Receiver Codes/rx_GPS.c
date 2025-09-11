@@ -1,3 +1,8 @@
+/*
+This code takes the NMEA strings from the GPS module, parses through them and then constucts the string as 
+mentioned in the README.md file.
+*/
+
 #include <SPI.h>
 #define PACKET_START '$'
 #define PACKET_STOP '*'
@@ -6,15 +11,18 @@
 #define TX_A3 0xA3
 #define RADIO_SHUTDOWN_PIN 7
 #define RADIO_CHIP_SELECT_PIN 10
+
 uint8_t radioConfig[] = {
-// Insert radio config array
+    // Insert radio config array
 };
+
 void sendCommand(uint8_t* data, uint8_t length) {
 uint8_t index;
 digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
 for (index = 0; index < length; index++) SPI.transfer(data[index]);
 digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
 }
+
 bool waitForCts() {
 uint8_t attemptIndex;
 uint8_t response;
@@ -29,6 +37,7 @@ delay(5);
 }
 return false;
 }
+
 void initializeRadio() {
 uint16_t configIndex;
 uint8_t blockLength;
@@ -43,6 +52,7 @@ configIndex += blockLength;
 waitForCts();
 }
 }
+
 void readRxFifo(uint8_t* buffer, uint8_t maxLength) {
 uint8_t index;
 digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
@@ -151,11 +161,10 @@ snprintf(fullMessage, sizeof(fullMessage), "%s[%s] RX:[%s] CALC:[%s] [status:
 content, receivedChecksum, receivedChecksum, calculatedChecksum,
 isValid ? "VALID" : "INVALID");
 Serial.println(fullMessage);
-}
-
-}
-}
-}
+        }
+      }
+    }
+  }
 clearRxFifo();
 startReceive();
 delay(400);
