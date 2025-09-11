@@ -1,3 +1,8 @@
+/*
+This code sends a simulated data string which follows the same format as mentioned in README.md file. The simulated code 
+also occasionally sends corrupted data to test the functionality and robustness of the system.
+*/
+
 #include <SPI.h>
 #define PACKET_START '$'
 #define PACKET_STOP '*'
@@ -6,15 +11,18 @@
 #define TX_A3 0xA3
 #define RADIO_SHUTDOWN_PIN 7
 #define RADIO_CHIP_SELECT_PIN 10
+
 uint8_t radioConfig[] = {
-//Insert radio config array
+    //Insert radio config array
 };
+
 void sendCommand(uint8_t* data, uint8_t length) {
 uint8_t index;
 digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
 for (index = 0; index < length; index++) SPI.transfer(data[index]);
 digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
 }
+
 bool waitForCts() {
 uint8_t attemptIndex;
 uint8_t response;
@@ -29,6 +37,7 @@ delay(5);
 }
 return false;
 }
+
 void initializeRadio() {
 uint16_t configIndex;
 uint8_t blockLength;
@@ -44,6 +53,7 @@ configIndex += blockLength;
 waitForCts();
 }
 }
+
 // Compute 2-hex-digit checksum of given buffer (sum of bytes)
 void computeChecksumHex( char* data, int len, char outHex[3]) {
 unsigned char checksum;
@@ -52,6 +62,7 @@ checksum = 0;
 for (i = 0; i < len; i++) checksum += data[i]; // Summing ASCII values
 sprintf(outHex, "%02X", checksum);
 }
+
 void sendPacket(char* payloadWithCs, uint8_t transmitterId) {
 uint8_t txFifoCommandAndData[64];
 uint8_t payloadLength;
@@ -69,6 +80,8 @@ startTxCommand[4] = totalPacketBytes;
 sendCommand(startTxCommand, sizeof(startTxCommand));
 waitForCts();
 }
+
+
 void setup() {
 pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
 pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
@@ -80,6 +93,7 @@ initializeRadio();
 randomSeed(micros());
 Serial.println("TX Ready");
 }
+
 uint8_t transmitterId;
 char content[96];
 char payload[128];
