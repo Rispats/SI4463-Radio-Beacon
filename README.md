@@ -52,3 +52,7 @@ $TX_A1,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 - A C program extracts Tx ID, date, time, latitude, and longitude from valid packets.
 - Data is displayed in a clean table with dedicated space for each transmitter.
 - Program supports filtering to show data from selected transmitters only.
+
+
+### NOTE: 
+All the radio config files are for max transmitter power(20dbm) and a data rate of 9.6kbps.
