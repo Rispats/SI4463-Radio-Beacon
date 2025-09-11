@@ -7,7 +7,7 @@ A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coor
 ## *FEATURES* 
 - Real-time GPS acquisition using EVE GNSS L89.
 - Wireless transmission via SI4463 RF transceiver (162 MHz / 433 MHz / 868 MHz).
-- Supports OOK, 2FSK, and 2GFSK modulation.
+- Continous Wave (106.725Mhz) trasnmission for traditional beacon functionality. 
 - Multi-transmitter operation with unique IDs (TX_A1, TX_A2, …).
 - Packet integrity ensured through checksum validation.
 - Simple C program UI for live data monitoring & filtering.
