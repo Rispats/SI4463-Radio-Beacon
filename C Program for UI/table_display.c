@@ -1,8 +1,12 @@
+/*
+Only three trasnmitter IDs have been added for the display testing.
+Arguments can be passed while executing the C program through terminal for filtering the transmitter IDs.
+*/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-
 
 void parse_gps_data(char* gps_string, char* date, char* time, char* lat, char* lon) {
     char* token;
@@ -61,6 +65,7 @@ void print_transmitter_table( char* tx_name, char* gps_data) {
 }
 
 int main(void) {
+    
     char t0[128];
     char last_str1[128] = "";
     char last_str2[128] = "";
@@ -71,7 +76,7 @@ int main(void) {
     FILE *fs;
     
     printf("GPS Tracker Monitor Started...\n");
-    printf("Press Shift+Ctrl+C to exit\n\n");
+    printf("Press Shift+C to exit\n\n");
     
     fs = fopen("/dev/ttyUSB0", "r");
     if (fs == NULL) {
