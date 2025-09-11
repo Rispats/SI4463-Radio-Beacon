@@ -1,6 +1,6 @@
 /*
-This code sends a simulated data string which follows the same format as mentioned in README.md file. The simulated code 
-also occasionally sends corrupted data to test the functionality and robustness of the system.
+This code sends a simulated data string which follows the same format as mentioned in README.md file. This is done
+because the simulated code occasionally sends corrupted data to test the functionality and robustness of the system.
 */
 
 #include <SPI.h>
