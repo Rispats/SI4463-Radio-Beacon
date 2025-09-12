@@ -43,14 +43,14 @@ $TX_A1,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 
 
 ## *WORK FLOW*
-- GPS locks onto ≥4 satellites and outputs NMEA strings.
+- GPS locks onto sufficient number of satellites and outputs NMEA strings.
 - TinyGPS++ parses NMEA data to extract date, time, latitude, and longitude.
 - Transmitter forms a packet with Tx ID, date, time, latitude, and longitude.
 - Start/stop bytes are added, checksum is calculated, and the packet is transmitted.
 - Receiver detects incoming packets, checks framing, and verifies checksum.
 - Invalid packets are discarded, valid packets are processed.
 - A C program extracts Tx ID, date, time, latitude, and longitude from valid packets.
-- Data is displayed in a clean table with dedicated space for each transmitter.
+- Data is displayed in a clean table like manner with dedicated space for each transmitter.
 - Program supports filtering to show data from selected transmitters only.
 
 
