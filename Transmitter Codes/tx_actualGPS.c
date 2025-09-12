@@ -73,45 +73,45 @@ void sendPacket(char* payloadWithCs, uint8_t transmitterId) {
     txFifoCommandAndData[1] = transmitterId;
     memcpy(&txFifoCommandAndData[2], payloadWithCs, payloadLength);
     sendCommand(txFifoCommandAndData, totalPacketBytes + 1);
+    startTxCommand[4] = totalPacketBytes;
+    sendCommand(startTxCommand, sizeof(startTxCommand));
     waitForCts();
 }
 
-startTxCommand[4] = totalPacketBytes;
-
-sendCommand(startTxCommand, sizeof(startTxCommand));
-waitForCts();
 void setup() {
-Serial.begin(115200);
-gpsSerial.begin(GPS_BAUD);
-pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
-pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
-digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
-SPI.begin();
-SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
-initializeRadio();
-Serial.println("TX Ready with Real GPS");
-Serial.print("Transmitter ID: ");
-Serial.println(TX_A1);
-Serial.println("Waiting for GPS fix...");
+    Serial.begin(115200);
+    gpsSerial.begin(GPS_BAUD);
+    pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
+    pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
+    digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
+    initializeRadio();
+    Serial.println("TX Ready with Real GPS");
+    Serial.print("Transmitter ID: ");
+    Serial.println(TX_A1);
+    Serial.println("Waiting for GPS fix...");
 }
+
 char content[96];
 char payload[128];
 char checksumHex[3];
-char dateStr[11]; // DD/MM/YYYY format
+char dateStr[11]; 
 char timeStr[9];
-// HH:MM:SS format
 char latStr[10];
-// Latitude string
 char lonStr[10];
-// Longitude string
 int contentLen;
+
 void loop() {
+    
 unsigned long lastTransmit = 0;
 bool gpsFixed = false;
-23// Feed GPS data to TinyGPS++
+
+// Feed GPS data to TinyGPS++
 while (gpsSerial.available() > 0) {
 gps.encode(gpsSerial.read());
 }
+    
 // Check if we have valid GPS data and enough time has passed
 if (millis() - lastTransmit > 1000) { // Transmit every 1 second
 if (gps.location.isValid() && gps.date.isValid() && gps.time.isValid()) {
@@ -154,5 +154,5 @@ sendPacket(payload, TX_A1);
 Serial.print("TX: ");
 Serial.println(payload);
 lastTransmit = millis();
-}
+    }
 }
