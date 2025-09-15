@@ -101,55 +101,55 @@ int contentLen;
 
 void loop() {
     
-unsigned long lastTransmit = 0;
-bool gpsFixed = false;
+    unsigned long lastTransmit = 0;
+    bool gpsFixed = false;
 
 // Feed GPS data to TinyGPS++
-while (gpsSerial.available() > 0) {
-gps.encode(gpsSerial.read());
+    while (gpsSerial.available() > 0) {
+    gps.encode(gpsSerial.read());
 }
     
 // Check if we have valid GPS data and enough time has passed
-if (millis() - lastTransmit > 1000) { // Transmit every 1 second
-if (gps.location.isValid() && gps.date.isValid() && gps.time.isValid()) {
-if (!gpsFixed) {
-Serial.println("GPS Fix acquired!");
-gpsFixed = true;
+    if (millis() - lastTransmit > 1000) { // Transmit every 1 second
+    if (gps.location.isValid() && gps.date.isValid() && gps.time.isValid()) {
+    if (!gpsFixed) {
+    Serial.println("GPS Fix acquired!");
+    gpsFixed = true;
 }
 // Format date as DD/MM/YYYY
-snprintf(dateStr, sizeof(dateStr), "%02d/%02d/%04d",
-gps.date.day(), gps.date.month(), gps.date.year());
+    snprintf(dateStr, sizeof(dateStr), "%02d/%02d/%04d",
+    gps.date.day(), gps.date.month(), gps.date.year());
 // Format time as HH:MM:SS
-snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d",
+    snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d",
 gps.time.hour(), gps.time.minute(), gps.time.second());
 // Format latitude with 3 decimal places
-dtostrf(gps.location.lat(), 6, 3, latStr);
+    dtostrf(gps.location.lat(), 6, 3, latStr);
 // Format longitude with 3 decimal places
-dtostrf(gps.location.lng(), 6, 3, lonStr);
+    dtostrf(gps.location.lng(), 6, 3, lonStr);
 // Build content string: TX_XX,DD/MM/YYYY,HH:MM:SS,lat,long
-snprintf(content, sizeof(content), "%s,%s,%s,%s,%s",
+    snprintf(content, sizeof(content), "%s,%s,%s,%s,%s",
 TX_A1, dateStr, timeStr, latStr, lonStr);
-} else {
+}     else {
 // No GPS fix - send placeholder data with current time
-if (gpsFixed) {
-Serial.println("GPS Fix lost!");
-gpsFixed = false;
+    if (gpsFixed) {
+    Serial.println("GPS Fix lost!");
+    gpsFixed = false;
 }
 // Use placeholder values when no GPS fix
-snprintf(content, sizeof(content), "%s,01/01/2025,00:00:00,0.000,0.000",
+    snprintf(content, sizeof(content), "%s,01/01/2025,00:00:00,0.000,0.000",
 TX_A1);
 }
 // Calculate checksum
-contentLen = strlen(content);
-computeChecksumHex(content, contentLen, checksumHex);
+    contentLen = strlen(content);
+    computeChecksumHex(content, contentLen, checksumHex);
 // Build final payload: "$content*[calc_cs]"
-snprintf(payload, sizeof(payload), "$%s*[%s]\r",
+    snprintf(payload, sizeof(payload), "$%s*[%s]\r",
 content, checksumHex);
 // Send packet
-sendPacket(payload, TX_A1);
+    sendPacket(payload, TX_A1);
 // Debug output
-Serial.print("TX: ");
-Serial.println(payload);
-lastTransmit = millis();
+    Serial.print("TX: ");
+    Serial.println(payload);
+    lastTransmit = millis();
     }
 }
