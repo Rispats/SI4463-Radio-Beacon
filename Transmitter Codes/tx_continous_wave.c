@@ -1,3 +1,7 @@
+/*Note that there is no receiver code written for continous wave detection, it was instead 
+detected using a commercial direction finder (DF500N); which could very easily detect the 
+CW transmitted by the SI4463 module*/
+
 #include <SPI.h>
 
 #define RADIO_SHUTDOWN_PIN 7
