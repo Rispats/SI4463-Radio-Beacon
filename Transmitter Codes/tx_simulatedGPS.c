@@ -17,81 +17,80 @@ uint8_t radioConfig[] = {
 };
 
 void sendCommand(uint8_t* data, uint8_t length) {
-uint8_t index;
-digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
-for (index = 0; index < length; index++) SPI.transfer(data[index]);
-digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
+    uint8_t index;
+    digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
+    for (index = 0; index < length; index++) SPI.transfer(data[index]);
+    digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
 }
 
 bool waitForCts() {
-uint8_t attemptIndex;
-uint8_t response;
-for (attemptIndex = 0; attemptIndex < 100; attemptIndex++) {
-digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
-SPI.transfer(0x44);
-delayMicroseconds(20);
-response = SPI.transfer(0x00);
-digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
-if (response == 0xFF) return true;
-delay(5);
+    uint8_t attemptIndex;
+    uint8_t response;
+    for (attemptIndex = 0; attemptIndex < 100; attemptIndex++) {
+    digitalWrite(RADIO_CHIP_SELECT_PIN, LOW);
+    SPI.transfer(0x44);
+    delayMicroseconds(20);
+    response = SPI.transfer(0x00);
+    digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
+    if (response == 0xFF) return true;
+    delay(5);
 }
-return false;
+    return false;
 }
 
 void initializeRadio() {
-uint16_t configIndex;
-uint8_t blockLength;
-digitalWrite(RADIO_SHUTDOWN_PIN, HIGH); delay(50);
-digitalWrite(RADIO_SHUTDOWN_PIN, LOW); delay(50);
-digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
-for (configIndex = 0; configIndex < sizeof(radioConfig); ) {
-blockLength = radioConfig[configIndex++];
-if (blockLength == 0x00) break;
-sendCommand(&radioConfig[configIndex], blockLength); // Configures radio
-configIndex += blockLength;
-
-waitForCts();
+    uint16_t configIndex;
+    uint8_t blockLength;
+    digitalWrite(RADIO_SHUTDOWN_PIN, HIGH); delay(50);
+    digitalWrite(RADIO_SHUTDOWN_PIN, LOW); delay(50);
+    digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
+    for (configIndex = 0; configIndex < sizeof(radioConfig); ) {
+    blockLength = radioConfig[configIndex++];
+    if (blockLength == 0x00) break;
+    sendCommand(&radioConfig[configIndex], blockLength); // Configures radio
+    configIndex += blockLength;
+    waitForCts();
 }
 }
 
 // Compute 2-hex-digit checksum of given buffer (sum of bytes)
 void computeChecksumHex( char* data, int len, char outHex[3]) {
-unsigned char checksum;
-int i;
-checksum = 0;
-for (i = 0; i < len; i++) checksum += data[i]; // Summing ASCII values
-sprintf(outHex, "%02X", checksum);
+    unsigned char checksum;
+    int i;
+    checksum = 0;
+    for (i = 0; i < len; i++) checksum += data[i]; // Summing ASCII values
+    sprintf(outHex, "%02X", checksum);
 }
 
 void sendPacket(char* payloadWithCs, uint8_t transmitterId) {
-uint8_t txFifoCommandAndData[64];
-uint8_t payloadLength;
-uint8_t totalPacketBytes;
-uint8_t startTxCommand[] = { 0x31, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-payloadLength = strlen(payloadWithCs);
-totalPacketBytes = 2 + payloadLength; // Only TX_ID + payload (no separate
-start/stop)
-txFifoCommandAndData[0] = 0x66; // WRITE_TX_FIFO
-txFifoCommandAndData[1] = transmitterId;
-memcpy(&txFifoCommandAndData[2], payloadWithCs, payloadLength);
-sendCommand(txFifoCommandAndData, totalPacketBytes + 1);
-waitForCts();
-startTxCommand[4] = totalPacketBytes;
-sendCommand(startTxCommand, sizeof(startTxCommand));
-waitForCts();
+    uint8_t txFifoCommandAndData[64];
+    uint8_t payloadLength;
+    uint8_t totalPacketBytes;
+    uint8_t startTxCommand[] = { 0x31, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    payloadLength = strlen(payloadWithCs);
+    totalPacketBytes = 2 + payloadLength; // Only TX_ID + payload (no separate
+    start/stop)
+    txFifoCommandAndData[0] = 0x66; // WRITE_TX_FIFO
+    txFifoCommandAndData[1] = transmitterId;
+    memcpy(&txFifoCommandAndData[2], payloadWithCs, payloadLength);
+    sendCommand(txFifoCommandAndData, totalPacketBytes + 1);
+    waitForCts();
+    startTxCommand[4] = totalPacketBytes;
+    sendCommand(startTxCommand, sizeof(startTxCommand));
+    waitForCts();
 }
 
 
 void setup() {
-pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
-pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
-digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
-Serial.begin(115200);
-SPI.begin();
-SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
-initializeRadio();
-randomSeed(micros());
-Serial.println("TX Ready");
+    pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
+    pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
+    digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
+    Serial.begin(115200);
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
+    initializeRadio();
+    randomSeed(micros());
+    Serial.println("TX Ready");
 }
 
 uint8_t transmitterId;
@@ -109,48 +108,48 @@ int randSecond;
 
 void loop() {
 // Generates a random time each transmission so the receiver shows updates
-randHour = random(0, 24);
-randMinute = random(0, 60);
-randSecond = random(0, 60);
+    randHour = random(0, 24);
+    randMinute = random(0, 60);
+    randSecond = random(0, 60);
 // Simulates incoming signals from 3 different transmitters
-roll = random(100);
-if (roll < 33) {
-transmitterId = TX_A1;
-txLabel = "TX_A1";
-snprintf(content, sizeof(content), "%s,04/09/2025,%02d:%02d:%02d,15.450,73.802",
-txLabel, randHour, randMinute, randSecond);
+    roll = random(100);
+    if (roll < 33) {
+    transmitterId = TX_A1;
+    txLabel = "TX_A1";
+    snprintf(content, sizeof(content), "%s,04/09/2025,%02d:%02d:%02d,15.450,73.802",
+    txLabel, randHour, randMinute, randSecond);
 } else if (roll < 66) {
-transmitterId = TX_A2;
-txLabel = "TX_A2";
-snprintf(content, sizeof(content), "%s,04/09/2025,%02d:%02d:%02d,15.453,73.803",
-txLabel, randHour, randMinute, randSecond);
+    transmitterId = TX_A2;
+    txLabel = "TX_A2";
+    snprintf(content, sizeof(content), "%s,04/09/2025,%02d:%02d:%02d,15.453,73.803",
+    txLabel, randHour, randMinute, randSecond);
 } else {
-transmitterId = TX_A3;
-txLabel = "TX_A3";
-snprintf(content, sizeof(content), "%s,04/09/2025,%02d:%02d:%02d,15.457,73.802",
-txLabel, randHour, randMinute, randSecond);
+    transmitterId = TX_A3;
+    txLabel = "TX_A3";
+    snprintf(content, sizeof(content), "%s,04/09/2025,%02d:%02d:%02d,15.457,73.802",
+    txLabel, randHour, randMinute, randSecond);
 }
-contentLen = strlen(content);
-computeChecksumHex(content, contentLen, checksumHex);
+    contentLen = strlen(content);
+    computeChecksumHex(content, contentLen, checksumHex);
 // Occasionally corrupt (about 30% chance)
-corruptRoll = random(100);
-if (corruptRoll < 30) {
+    corruptRoll = random(100);
+    if (corruptRoll < 30) {
 // 50%: corrupt data, 50%: corrupt checksum
-if (random(2) == 0) {
+    if (random(2) == 0) {
 // Corrupt a random character within content area (DON'T recalculate checksum)
-if (contentLen > 5) {
-corruptIndex = 5 + random(contentLen - 5);
-if (content[corruptIndex] != ',') content[corruptIndex] = '#';
+    if (contentLen > 5) {
+    corruptIndex = 5 + random(contentLen - 5);
+    if (content[corruptIndex] != ',') content[corruptIndex] = '#';
 }
 // Don't recalculate checksum - this creates a mismatch for testing
-} else {
+}   else {
 // Corrupt checksum digit
-checksumHex[0] = (checksumHex[0] == 'F') ? '0' : 'F';
+    checksumHex[0] = (checksumHex[0] == 'F') ? '0' : 'F';
 }
 }
 // Final payload: $TX_XX,DD/MM/YYYY,HH:MM:SS,Lat,Long*[CS]
-snprintf(payload, sizeof(payload), "$%s*[%s]", content, checksumHex);
-sendPacket(payload, transmitterId); // Begins data transmission
-Serial.println(payload);
-delay(800);
+    snprintf(payload, sizeof(payload), "$%s*[%s]", content, checksumHex);
+    sendPacket(payload, transmitterId); // Begins data transmission
+    Serial.println(payload);
+    delay(800);
 }
