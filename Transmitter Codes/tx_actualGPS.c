@@ -14,6 +14,7 @@
 // Create GPS object
 TinyGPSPlus gps;
 HardwareSerial gpsSerial(1);
+
 uint8_t radioConfig[] = {
     // Insert radio config array
 };
@@ -39,6 +40,7 @@ bool waitForCts() {
 }
 return false;
 }
+
 void initializeRadio() {
     uint16_t configIndex;
     uint8_t blockLength;
@@ -79,17 +81,12 @@ void sendPacket(char* payloadWithCs, uint8_t transmitterId) {
 }
 
 void setup() {
-    Serial.begin(115200);
-    gpsSerial.begin(GPS_BAUD);
     pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
     pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
     digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
-    SPI.begin();
-    SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
-    initializeRadio();
-    Serial.println("TX Ready with Real GPS");
-    Serial.print("Transmitter ID: ");
-    Serial.println(TX_A1);
+    Serial.begin(115200);
+    gpsSerial.begin(GPS_BAUD);
+    Serial.println("TX Ready");
     Serial.println("Waiting for GPS fix...");
 }
 
