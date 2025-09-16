@@ -1,25 +1,27 @@
 # GPS-Enabled RF Beacon
 
-A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coordinates (date, time, latitude, longitude) over customizable frequency bands in addition to replicating traditionaly RF beacon functionality of sending continous bursts of Continous Waves (tones). Designed using ESP32 microcontrollers, GNSS modules, and the Si4463 RF transceiver, the system supports multiple transmitters with unique IDs, checksum validation, and real-time monitoring via a C-based command-line interface.
+A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coordinates (date, time, latitude, longitude) over user-customizable frequency bands (142-1050Mhz) in addition to replicating traditional RF beacon functionality of transmitting periodic bursts of continous waves (tones).
+
+Designed using Arduino/ESP32 microcontrollers, GNSS module, and the SI4463 RF transceiver, the system supports multiple transmitters with unique IDs, checksum validation, and real-time monitoring via a C-based command-line interface.
 
 
 
 ## *FEATURES* 
-- Real-time GPS acquisition using EVE GNSS L89.
-- Wireless transmission via SI4463 RF transceiver (162 MHz / 433 MHz / 868 MHz).
-- Continous Wave (106.725Mhz) trasnmission for traditional beacon functionality. 
+- Real-time GPS data (NEAM strings) acquisition using the EVE GNSS L89.
+- Wireless transmission via SI4463 RF transceiver (162 MHz, 433 MHz and 868 MHz; all were tested using 2GFSK, 2FSK and OOK).
+- Continous Wave (160.725Mhz) trasnmission for traditional beacon functionality (Detectable via deficated receiver such as DF500N). 
 - Multi-transmitter operation with unique IDs (TX_A1, TX_A2, …).
-- Packet integrity ensured through checksum validation.
+- Packet robustness and integrity ensured through start/stop bits and checksum validation.
 - Simple C program UI for live data monitoring & filtering.
 
 
 
 ## *COMPONENTS USED*
-- Arduino Nano ESP32-S3 → Transmitter MCU.
-- ESP32-C3-M1 → Receiver MCU.
-- EVE GNSS L89 GPS Module.
-- Si4463 Sub-GHz Transceiver (GNiceRF RFSi4463-868).
-- Coiled & Extended Antennas (~2.2 cm / ~25 cm).
+- **Arduino Nano ESP32-S3** → Transmitter MCU.
+- **ESP32-C3-M1** → Receiver MCU.
+- **EVE GNSS L89** → GPS Module.
+- **GNice RF4463PRO-868** → Sub-GHz Transceiver.
+- A generic copper wire as antenna (Coiled ~2.2 cm / Extended ~25 cm).
 
 
 
@@ -28,11 +30,12 @@ A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coor
 - Acquires GPS data in the form of NMEA strings and sends it to the microcontoller.
 - The TinyGPS++ library (in MCU firmware) then parses these NMEA strings and extracts the date, time, lat and long values.
 - A string containing this GPS data, start/stop bit and the transmitter ID is then constructed.
-- Final string that is to be transmitted looks like:
+- Format of the final string that is to be transmitted looks like:
 ```
 $TX_A1,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 ```
-- Transmits this string over RF using SPI-configured Si4463.
+- Transmits this string over RF using SPI-configured SI4463.
+  
 ### 2) Receiver:
 - Continuously listens for packets.
 - Validates data with checksum & discards corrupted/invalid strings.
