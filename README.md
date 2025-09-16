@@ -23,7 +23,7 @@ Designed using Arduino/ESP32 microcontrollers, GNSS module, and the SI4463 RF tr
 - **GNice RF4463PRO-868** → Sub-GHz Transceiver.
 - A generic copper wire as antenna (Coiled ~2.2 cm / Extended ~25 cm).
 
-   <img width="100" height="100" alt="Screenshot from 2025-09-16 21-53-05" src="https://github.com/user-attachments/assets/00c07dfb-4116-4019-940d-fc2f95081034"/>
+   <img width="150" height="150" alt="Screenshot from 2025-09-16 21-53-05" src="https://github.com/user-attachments/assets/00c07dfb-4116-4019-940d-fc2f95081034"/>
 
 
 
