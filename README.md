@@ -23,7 +23,7 @@ Designed using Arduino/ESP32 microcontrollers, GNSS module, and the SI4463 RF tr
 - **GNice RF4463PRO-868** → Sub-GHz Transceiver.
 - A generic copper wire as antenna (Coiled ~2.2 cm / Extended ~25 cm).
 
-   <img width="150" height="150" alt="Screenshot from 2025-09-16 21-53-05" src="https://github.com/user-attachments/assets/00c07dfb-4116-4019-940d-fc2f95081034"/>
+   <img width="200" height="200" alt="Screenshot from 2025-09-16 21-53-05" src="https://github.com/user-attachments/assets/00c07dfb-4116-4019-940d-fc2f95081034"/>
 
 
 
@@ -58,6 +58,37 @@ $TX_A1,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 - A C program extracts Tx ID, date, time, latitude, and longitude from valid packets.
 - Data is displayed in a clean table like manner with dedicated space for each transmitter.
 - Program supports filtering to show data from selected transmitters only.
+
+## *RESULTS*
+
+
+### 162Mhz:
+
+<img width="1600" height="1000" alt="fin162" src="https://github.com/user-attachments/assets/9433d3ca-148a-4d97-85b7-f7919ccb19d8"/>
+
+
+
+
+
+
+### 433Mhz:
+
+<img width="1600" height="1000" alt="Figure_1" src="https://github.com/user-attachments/assets/47b7742d-3fb4-48fa-b8a2-348c0191283d"/>
+
+
+
+
+
+
+### 868Mhz:
+
+<img width="1600" height="1000" alt="fin868" src="https://github.com/user-attachments/assets/36c6332c-4638-49e4-9834-1acca6eec348"/>
+
+
+### **OVERALL COMBINED RESULT:**
+
+
+<img width="1600" height="1000" alt="ovr" src="https://github.com/user-attachments/assets/7813f49a-2e01-4124-a6d1-4c4560e984bd" />
 
 
 ### NOTE: 
