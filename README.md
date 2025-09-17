@@ -35,18 +35,29 @@ Designed using Arduino/ESP32 microcontrollers, GNSS module, and the SI4463 RF tr
 - A string containing this GPS data, start/stop bit and the transmitter ID is then constructed.
 - Format of the final string that is to be transmitted looks like:
 ```
-$TX_A1,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
+$TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 ```
 - Transmits this string over RF using SPI-configured SI4463.
   
 ### 2) Receiver:
 - Continuously listens for packets.
 - Validates data with checksum & discards corrupted/invalid strings.
-- Only valid strings are relayed to the serial port whihc will be read by the C program for display.
+- Only VALID strings are relayed to the serial port whihc will be read by the C program for display.
 - Provides real-time monitoring via the C program on the terminal window.
 - Each tranmitter ID is alloted its own dedicated space to dislay the only the latest data that has arrived.
+- Format of the received signal looks like:
+```
+&TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[calc_cs|recv_cs][STATUS: status]
+```
 
+### 3) C Program:
+- When executed, it reads the invalid stings relayed to the serial port, parses them to extract transmitted ID, Date, Time Lat and Long.
+- Allots each transmitted ID and the data assiciated with it some space on the terminal window in a table like format.
+- This table is updated for each transmitted ID as the latest values for it arrives.
 
+<p align="center">
+<img width="500" height="764" alt="Screenshot from 2025-09-17 21-53-54" src="https://github.com/user-attachments/assets/a786933e-c164-491d-9a76-c8ab44eb8e8e" />
+</p>
 
 ## *WORK FLOW*
 - GPS locks onto sufficient number of satellites and outputs NMEA strings.
