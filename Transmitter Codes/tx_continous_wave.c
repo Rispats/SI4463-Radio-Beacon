@@ -2,13 +2,17 @@
 detected using a commercial direction finder (DF500N); which could very easily detect the 
 CW transmitted by the SI4463 module*/
 
+/*Note that there is no receiver code written for continous wave detection, it was instead 
+detected using a commercial direction finder (DF500N); which could very easily detect the 
+CW transmitted by the SI4463 module*/
+
 #include <SPI.h>
 
 #define RADIO_SHUTDOWN_PIN 7
 #define RADIO_CHIP_SELECT_PIN 10
 
 
-uint8_t RADIO_CONFIG[] = {
+uint8_t radioConfig[] = {
     // Insert radio config array with an OOK modulation scheme only; frequency of your choice
 };
 
@@ -52,17 +56,17 @@ void initializeRadio() {
 void transmitBegin(uint8_t data) {
   uint8_t fifo[] = { 0x66, data };  // 0x66 = WRITE_TX_FIFO
   sendCommand(fifo, sizeof(fifo));
-  waitCTS();
+  waitForCts();
 
   uint8_t tx_cmd[] = { 0x31, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00 }; // channel 0, 1-byte packet
   sendCommand(tx_cmd, sizeof(tx_cmd));
-  waitCTS();
+  waitForCts();
 }
 
 void setup() {
-  pinMode(PIN_SDN, OUTPUT);
-  pinMode(PIN_CSN, OUTPUT);
-  digitalWrite(PIN_CSN, HIGH);
+  pinMode(RADIO_SHUTDOWN_PIN, OUTPUT);
+  pinMode(RADIO_CHIP_SELECT_PIN, OUTPUT);
+  digitalWrite(RADIO_CHIP_SELECT_PIN, HIGH);
 
   Serial.begin(115200);
   SPI.begin();
@@ -78,5 +82,5 @@ void loop() {
   
   Serial.println(bit, BIN);
   transmitBegin(bit);
-  delay(20); 
+  delay(50); // Change delay to set burst period
 }
