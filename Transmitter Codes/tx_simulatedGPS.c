@@ -68,8 +68,7 @@ void sendPacket(char* payloadWithCs, uint8_t transmitterId) {
     uint8_t totalPacketBytes;
     uint8_t startTxCommand[] = { 0x31, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     payloadLength = strlen(payloadWithCs);
-    totalPacketBytes = 2 + payloadLength; // Only TX_ID + payload (no separate
-    start/stop)
+    totalPacketBytes = 2 + payloadLength; // Only TX_ID + payload (no separate start/stop)
     txFifoCommandAndData[0] = 0x66; // WRITE_TX_FIFO
     txFifoCommandAndData[1] = transmitterId;
     memcpy(&txFifoCommandAndData[2], payloadWithCs, payloadLength);
