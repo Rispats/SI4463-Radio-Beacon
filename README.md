@@ -46,8 +46,8 @@ Arduino Nano ESP32-S3 | EVE GNSS L89
 :---: | :------:
 3.3V | 3.3V
 Gnd | Gnd
-D3 | RX
-D4 | TX
+D4 | RX
+D3 | TX
 
 
 ### 3) ESP32-C3-M1 to SI4463:
@@ -136,6 +136,37 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 <p align="center">
 <img width="1600" height="1000" alt="ovr" src="https://github.com/user-attachments/assets/7813f49a-2e01-4124-a6d1-4c4560e984bd" />
 </p>
+
+## *REFERENCES*
+[Espressif Systems, “ESP32-C3 Series Datasheet”](https://documentation.espressif.com/esp32-c3_datasheet_en.html)
+
+Quectel Wireless Solutions, “L89 GNSS Module Data Sheet” and “L89 GNSS Protocol Specification”
+https://evelta.com/content/datasheets/027-L89.pdf
+https://evelta.com/content/datasheets/L89-AT-command-manual.pdf
+
+Silicon Labs, “Si446x Data Sheet”
+https://www.silabs.com/documents/public/data-sheets/Si4463-61-60-C.pdf
+
+Silicon Labs, “Wireless Development Suite General Description”
+https://www.silabs.com/documents/public/application-notes/AN796.pdf
+
+G-NiceRF, “SI4463 Wireless Module Product Manual”
+https://www.nicerf.com/fsk-front-end-module/868mhz-rf-module-rf4463pro.html
+
+Mikal Hart, “TinyGPS++: Arduino Library for Parsing NMEA Sentences”
+https://github.com/mikalhart/TinyGPSPlus
+
+Direction Finder “DF-500N MetOcean Telematics”
+https://metocean.com/wp-content/uploads/2017/09/DF-500N-1.pdf
+
+Circuit Basics, “Basics of the SPI Communication Protocol”
+https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/
+
+Circuit Basics, “Basics of UART Communication”
+https://www.circuitbasics.com/basics-uart-communication/
+
+Antenna Theory (for general RF and Antenna concepts)
+https://www.antenna-theory.com/antennas/main.php
 
 ### NOTE: 
 All the radio config files are for maximum transmitter power (20dbm) and data rate of 9.6kbps.
