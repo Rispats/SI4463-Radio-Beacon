@@ -94,7 +94,7 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 ```
 ./a.out TX_A1 TXA3
 
-// This will only shows transmitter A1 and A3 on the terminal screen
+// This will only show transmitter A1 and A3 on the terminal screen
 ```
 
 <p align="center">
@@ -138,35 +138,27 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 </p>
 
 ## *REFERENCES*
-[Espressif Systems, “ESP32-C3 Series Datasheet”](https://documentation.espressif.com/esp32-c3_datasheet_en.html)
+[Arduino Nano ESP32-S3 Data sheet](https://docs.arduino.cc/resources/datasheets/ABX00083-datasheet.pdf)
 
-Quectel Wireless Solutions, “L89 GNSS Module Data Sheet” and “L89 GNSS Protocol Specification”
-https://evelta.com/content/datasheets/027-L89.pdf
-https://evelta.com/content/datasheets/L89-AT-command-manual.pdf
+[Espressif Systems, ESP32-C3 Series Datasheet](https://documentation.espressif.com/esp32-c3_datasheet_en.html)
 
-Silicon Labs, “Si446x Data Sheet”
-https://www.silabs.com/documents/public/data-sheets/Si4463-61-60-C.pdf
+[Quectel Wireless Solutions, L89 GNSS Module Data Sheet](https://evelta.com/content/datasheets/027-L89.pdf) and [L89 GNSS Protocol Specification](https://evelta.com/content/datasheets/L89-AT-command-manual.pdf)
 
-Silicon Labs, “Wireless Development Suite General Description”
-https://www.silabs.com/documents/public/application-notes/AN796.pdf
+[Silicon Labs, Si446x Data Sheet](https://www.silabs.com/documents/public/data-sheets/Si4463-61-60-C.pdf)
 
-G-NiceRF, “SI4463 Wireless Module Product Manual”
-https://www.nicerf.com/fsk-front-end-module/868mhz-rf-module-rf4463pro.html
+[Silicon Labs, Wireless Development Suite General Description](https://www.silabs.com/documents/public/application-notes/AN796.pdf)
 
-Mikal Hart, “TinyGPS++: Arduino Library for Parsing NMEA Sentences”
-https://github.com/mikalhart/TinyGPSPlus
+[G-Nice RF4463PRO-868 (RF Transceiver)](https://www.nicerf.com/fsk-front-end-module/868mhz-rf-module-rf4463pro.html)
 
-Direction Finder “DF-500N MetOcean Telematics”
-https://metocean.com/wp-content/uploads/2017/09/DF-500N-1.pdf
+[Mikal Hart, TinyGPS++: Arduino Library for Parsing NMEA Sentences](https://github.com/mikalhart/TinyGPSPlus)
 
-Circuit Basics, “Basics of the SPI Communication Protocol”
-https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/
+[Direction Finder DF-500N MetOcean Telematics](https://metocean.com/wp-content/uploads/2017/09/DF-500N-1.pdf)
 
-Circuit Basics, “Basics of UART Communication”
-https://www.circuitbasics.com/basics-uart-communication/
+[Circuit Basics, Basics of the SPI Communication Protocol](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/)
 
-Antenna Theory (for general RF and Antenna concepts)
-https://www.antenna-theory.com/antennas/main.php
+[Circuit Basics, Basics of UART Communication](https://www.circuitbasics.com/basics-uart-communication/)
+
+[Antenna Theory (for general RF and Antenna concepts)](https://www.antenna-theory.com/antennas/main.php)
 
 ### NOTE: 
 All the radio config files are for maximum transmitter power (20dbm) and data rate of 9.6kbps.
