@@ -8,24 +8,6 @@ Designed using Arduino/ESP32 microcontrollers, GNSS module, and the SI4463 RF tr
 
 ---
 
-## *REPOSITORY STRUCTURE*
-```
-SI4463-Radio-Beacon/
-├── transmitter/          # Transmitter firmware (.ino files)
-│   ├── tx_actualGPS.ino       # Real GPS data transmitter
-│   ├── tx_simulatedGPS.ino    # Simulated GPS with corruption testing
-│   └── tx_continous_wave.ino  # CW beacon transmitter
-├── receiver/             # Receiver firmware (.ino files)
-│   └── rx_GPS.ino             # GPS data receiver with validation
-├── ui/                   # Terminal monitoring program
-│   └── table_display.c        # C program for formatted display
-├── radio_configs/        # SI4463 configuration files
-│   ├── 162_*.txt              # 162 MHz configs (2FSK, 2GFSK, OOK)
-│   ├── 433_*.txt              # 433 MHz configs (2FSK, 2GFSK, OOK)
-│   └── 868_*.txt              # 868 MHz configs (2FSK, 2GFSK, OOK)
-├── examples/             # Example configurations and demos
-└── README.md             # This file
-```
 
 ## *FEATURES* 
 - Real-time GPS data (NMEA strings) acquisition using the EVE GNSS L89.
