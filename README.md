@@ -93,7 +93,7 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 - All transmitters are displayed by default when no argument is passed while executing the C program. If the user wants only specific transmitter to show up on the screen he can do so by passing The transmitter IDs as arguments while executing the program, such as:
   
 ```
-./a.out TX_A1 TXA3
+./a.out TX_A1 TX_A3
 
 // This will only show transmitter A1 and A3 on the terminal screen
 ```
