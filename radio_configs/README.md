@@ -43,3 +43,5 @@ Use Silicon Labs WDS3 software to generate custom configurations:
 3. Configure desired parameters (frequency, modulation, power, etc.)
 4. Export configuration array
 5. Copy to your Arduino sketch
+
+#### NOTE: OOK is used to generate and transmit continuous waves by sending all 1's in `transmitter/tx_continous_wave.ino`
