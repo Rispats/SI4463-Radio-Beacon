@@ -1,7 +1,14 @@
 /*
-Only three trasnmitter IDs have been added for the display testing.
-Arguments can be passed while executing the C program through terminal for filtering the transmitter IDs.
-*/
+ * GPS Beacon Monitor - Terminal UI
+ * 
+ * Displays real-time GPS data from multiple beacon transmitters in a
+ * formatted table on the terminal. Supports filtering by transmitter ID.
+ * 
+ * Usage: ./table_display [TX_A1] [TX_A2] [TX_A3]
+ * If no arguments provided, displays all transmitters.
+ * 
+ * Compilation: gcc table_display.c -o table_display
+ */
 
 #include <stdio.h>
 #include <unistd.h>

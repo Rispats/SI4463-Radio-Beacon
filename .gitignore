@@ -1,0 +1,26 @@
+# Arduino/PlatformIO
+.pio/
+.vscode/
+*.elf
+*.bin
+*.hex
+
+# C compiled files
+*.o
+*.out
+a.out
+table_display
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+*.swp
+*.swo
+*~
+.idea/
+
+# Build artifacts
+build/
+dist/

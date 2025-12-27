@@ -1,7 +1,12 @@
 /*
-This code takes the NMEA strings from the GPS module, parses through them and then constucts the string as 
-mentioned in the README.md file.
-*/
+ * GPS-Enabled RF Beacon Receiver
+ * 
+ * Receives GPS data packets from SI4463 RF transceiver, validates checksums,
+ * and relays valid data to serial port for display by the C monitoring program.
+ * 
+ * Hardware: ESP32-C3-M1 + SI4463
+ * Supports multiple transmitters: TX_A1, TX_A2, TX_A3
+ */
 
 #include <SPI.h>
 

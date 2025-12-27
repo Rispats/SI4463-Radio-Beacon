@@ -1,19 +1,38 @@
 # GPS-Enabled RF Beacon
 
-A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coordinates (date, time, latitude, longitude) over user-customizable frequency bands (142-1050Mhz) in addition to replicating traditional RF beacon functionality of transmitting periodic bursts of continous waves (tones).
+A GPS-enabled RF beacon system for transmitting and receiving real-time GPS coordinates (date, time, latitude, longitude) over user-customizable frequency bands (142-1050 MHz) in addition to replicating traditional RF beacon functionality of transmitting periodic bursts of continuous waves (tones).
 
-All the RF parameters such as frequency, modulation shceme, datarate, deviation etc., of the SI4463 module can be tuned via the WDS software by Silicon Labs.
+All the RF parameters such as frequency, modulation scheme, datarate, deviation etc., of the SI4463 module can be tuned via the WDS software by Silicon Labs.
 
 Designed using Arduino/ESP32 microcontrollers, GNSS module, and the SI4463 RF transceiver, the system supports multiple transmitters with unique IDs, checksum validation, and real-time monitoring via a C-based command-line interface.
 
+---
 
+## *REPOSITORY STRUCTURE*
+```
+SI4463-Radio-Beacon/
+├── transmitter/          # Transmitter firmware (.ino files)
+│   ├── tx_actualGPS.ino       # Real GPS data transmitter
+│   ├── tx_simulatedGPS.ino    # Simulated GPS with corruption testing
+│   └── tx_continous_wave.ino  # CW beacon transmitter
+├── receiver/             # Receiver firmware (.ino files)
+│   └── rx_GPS.ino             # GPS data receiver with validation
+├── ui/                   # Terminal monitoring program
+│   └── table_display.c        # C program for formatted display
+├── radio_configs/        # SI4463 configuration files
+│   ├── 162_*.txt              # 162 MHz configs (2FSK, 2GFSK, OOK)
+│   ├── 433_*.txt              # 433 MHz configs (2FSK, 2GFSK, OOK)
+│   └── 868_*.txt              # 868 MHz configs (2FSK, 2GFSK, OOK)
+├── examples/             # Example configurations and demos
+└── README.md             # This file
+```
 
 ## *FEATURES* 
-- Real-time GPS data (NEAM strings) acquisition using the EVE GNSS L89.
+- Real-time GPS data (NMEA strings) acquisition using the EVE GNSS L89.
 - Wireless transmission via SI4463 RF transceiver (162 MHz, 433 MHz and 868 MHz; all were tested using 2GFSK, 2FSK and OOK).
-- Continous Wave (160.725Mhz) trasnmission for traditional beacon functionality (Detectable via dedicated receivers such as the DF500N). 
+- Continuous Wave (160.725 MHz) transmission for traditional beacon functionality (Detectable via dedicated receivers such as the DF500N). 
 - Multi-transmitter operation with unique IDs (TX_A1, TX_A2, …).
-- Easily scalable since adding (and removing too) new transmiters is a simple process. 
+- Easily scalable since adding (and removing too) new transmitters is a simple process. 
 - Packet robustness and integrity ensured through start/stop bits and checksum validation.
 - Simple C program UI for live data monitoring & filtering.
 
@@ -63,7 +82,7 @@ GPIO6 | SDI
 
 ## *SYSTEM DESIGN*
 ### 1) Transmitter:
-- Acquires GPS data in the form of NMEA strings and sends it to the microcontoller.
+- Acquires GPS data in the form of NMEA strings and sends it to the microcontroller.
 - The TinyGPS++ library (in MCU firmware) then parses these NMEA strings and extracts the date, time, lat and long values.
 - A string containing this GPS data, start/stop bit and the transmitter ID is then constructed.
 - Format of the final string that is to be transmitted looks like:
@@ -75,9 +94,9 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 ### 2) Receiver:
 - Continuously listens for packets.
 - Upon receiving packet; checks for Start/Stop bits, validates data with checksum & discards corrupted/invalid strings.
-- Only VALID strings are relayed to the serial port whihc will be read by the C program for display.
+- Only VALID strings are relayed to the serial port which will be read by the C program for display.
 - Provides real-time monitoring via the C program on the terminal window.
-- Each tranmitter ID is alloted its own dedicated space to dislay the only the latest data that has arrived.
+- Each transmitter ID is allotted its own dedicated space to display only the latest data that has arrived.
 - Format of the received signal looks like:
 ```
 &TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[calc_cs|recv_cs][STATUS: status]
@@ -86,9 +105,9 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 ```
 
 ### 3) C Program:
-- When executed, it reads the VALID stings relayed to the serial port, parses them to extract transmitter ID, date, time latitude and longitude.
-- Allots each transmitter ID and the data assiciated with it some space on the terminal window in a table like format.
-- This table is updated for each transmitter ID as the latest values for it arrives.
+- When executed, it reads the VALID strings relayed to the serial port, parses them to extract transmitter ID, date, time, latitude and longitude.
+- Allots each transmitter ID and the data associated with it some space on the terminal window in a table like format.
+- This table is updated for each transmitter ID as the latest values arrive.
 - All transmitters are displayed by default when no argument is passed while executing the C program. If the user wants only specific transmitter to show up on the screen he can do so by passing The transmitter IDs as arguments while executing the program, such as:
   
 ```
@@ -115,17 +134,17 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 
 ## *RESULTS*
 
-### 162Mhz:
+### 162 MHz:
 <p align="center">
 <img width="1600" height="1000" alt="fin162" src="https://github.com/user-attachments/assets/9433d3ca-148a-4d97-85b7-f7919ccb19d8"/>
 </p>
 
-### 433Mhz:
+### 433 MHz:
 <p align="center">
 <img width="1600" height="1000" alt="Figure_1" src="https://github.com/user-attachments/assets/47b7742d-3fb4-48fa-b8a2-348c0191283d"/>
 </p>
 
-### 868Mhz:
+### 868 MHz:
 <p align="center">
 <img width="1600" height="1000" alt="fin868" src="https://github.com/user-attachments/assets/36c6332c-4638-49e4-9834-1acca6eec348"/>
 </p>
@@ -161,4 +180,4 @@ $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
 [Antenna Theory (for general RF and Antenna concepts)](https://www.antenna-theory.com/antennas/main.php)
 
 ### NOTE: 
-All the radio config files are for maximum transmitter power (20dbm) and data rate of 9.6kbps.
+All the radio config files are for maximum transmitter power (20 dBm) and data rate of 9.6 kbps.

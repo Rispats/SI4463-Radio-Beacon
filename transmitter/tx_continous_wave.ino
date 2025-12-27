@@ -1,10 +1,13 @@
-/*Note that there is no receiver code written for continous wave detection, it was instead 
-detected using a commercial direction finder (DF500N); which could very easily detect the 
-CW transmitted by the SI4463 module*/
-
-/*Note that there is no receiver code written for continous wave detection, it was instead 
-detected using a commercial direction finder (DF500N); which could very easily detect the 
-CW transmitted by the SI4463 module*/
+/*
+ * Continuous Wave Transmitter for SI4463
+ * 
+ * Transmits continuous wave (CW) beacon signal for radio direction finding.
+ * Note: No receiver code is provided as CW detection was performed using
+ * a commercial direction finder (DF500N).
+ * 
+ * Hardware: Arduino Nano ESP32-S3 / ESP32-C3 + SI4463 RF Module
+ * Modulation: OOK (On-Off Keying) for CW generation
+ */
 
 #include <SPI.h>
 

@@ -1,7 +1,13 @@
 /*
-This code sends a simulated data string which follows the same format as mentioned in README.md file. This is done
-because the simulated code occasionally sends corrupted data to test the functionality and robustness of the system.
-*/
+ * GPS-Enabled RF Beacon Transmitter (Simulated GPS Data)
+ * 
+ * Sends simulated GPS data in the same format as real GPS transmitter.
+ * Includes intentional data corruption (~20% of packets) to test system
+ * robustness and checksum validation.
+ * 
+ * Hardware: Arduino Nano ESP32-S3 / ESP32-C3 + SI4463
+ * Packet Format: $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
+ */
 
 #include <SPI.h>
 

@@ -1,3 +1,13 @@
+/*
+ * GPS-Enabled RF Beacon Transmitter (Real GPS Data)
+ * 
+ * Acquires real GPS coordinates from EVE GNSS L89 module and transmits
+ * formatted data packets over SI4463 RF transceiver.
+ * 
+ * Hardware: Arduino Nano ESP32-S3 + SI4463 + EVE GNSS L89
+ * Packet Format: $TX_XX,DD/MM/YYYY,HH:MM:SS,LAT,LONG*[CS]
+ */
+
 #include <SPI.h>
 #include <TinyGPS++.h>
 
